@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<div id="app">
+    <input type="file" @change="onFileChange" accept="image/*">
+    <button @click="uploadImage">上傳圖片test</button>
+    <img :src="imageUrl" v-if="imageUrl" width="200px">
+<!--    <el-image :src="localImageSrc" v-if="localImageSrc" />-->
+</div>
+<div id="appQuery">
+    <table >
+        <thead >
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">產品種類</th>
+            <th scope="col">產品名稱</th>
+            <th scope="col">產品價格</th>
+            <th scope="col">產品狀態</th>
+            <th scope="col">產品照片</th>
+            <th scope="col">產品描述</th>
+            <th scope="col">上架時間</th>
+            <th scope="col">更新時間</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="p in productList">
+            <td>{{p.pid}}</td>
+            <td>{{p.pcategory}}</td>
+            <td>{{p.pname}}</td>
+            <td>{{p.pprice}}</td>
+            <td>{{p.pstatus}}</td>
+            <td><img src="{{p.pphoto}}"/></td>
+            <td>{{p.pdescription}}</td>
+            <td>{{p.createTime}}</td>
+            <td>{{p.updateTime}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<!-- 引入 Element UI 的樣式文件 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入 Element UI 的腳本文件 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script th:src="@{/js/appQuery.js}"></script>
+
+</body>
+</html>

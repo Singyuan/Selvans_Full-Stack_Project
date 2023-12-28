@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+
+
+</head>
+<body>
+
+<div id="appQuery">
+
+    <el-container style="height: 500px; border: 1px solid #eee ;">
+        <el-header style="font-size: 50px; background-color: rgb(68, 114, 193)">C&B產品列表</el-header>
+        <el-container>
+            <el-aside width="200px">
+                <el-menu>
+                    <el-submenu index="1">
+                        <template slot="title"><i class="el-icon-message"></i>產品管理</template>
+                        <el-menu-item index="1-1">產品管理</el-menu-item>
+                        <el-menu-item index="1-2" @click="dialogFormVisible = true">新增產品</el-menu-item>
+                    </el-submenu>
+                    <el-submenu index="2">
+                        <template slot="title"><i class="el-icon-message"></i>訂單管理</template>
+                        <el-menu-item index="1-1">訂單查詢</el-menu-item>
+                        <el-menu-item index="1-2">訂單報表</el-menu-item>
+                    </el-submenu>
+
+                </el-menu>
+            </el-aside>
+
+            <el-main>
+                <el-form :inline="true" :model="searchForm" class="demo-form-inline ">
+                    <el-form-item label="產品名稱" style="width:180px">
+                        <el-input v-model="searchForm.pname" placeholder="產品名稱"></el-input>
+                    </el-form-item>
+                    <el-form-item label="產品種類" style="width:180px">
+                        <el-select v-model="searchForm.pcategory" placeholder="請選擇產品種類">
+                            <el-option v-for="category in tableData" :key="category.pid"
+                                       label="category.cid" value="cid"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="時間範圍" style="width:180px">
+                        <el-date-picker v-model="searchForm.createTime" type="daterange" range-separator="至"
+                                        start-placeholder="開始日期" end-plaproductceholder="结束日期" style="width:188px">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item style="width:180px">
+                        <el-button type="primary" @click="onSubmit">查詢</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="tableData" border style="width: 100%">
+                    <el-table-column type="selection" width="55" align="center"></el-table-column>
+                    <el-table-column prop="pid" label="產品ID" align="center">
+                    </el-table-column>
+                    <el-table-column prop="pcategory" label="產品分類" align="center">
+                    </el-table-column>
+                    <el-table-column fixed prop="pname" label="產品名稱" align="center">
+                    </el-table-column>
+                    <el-table-column prop="pprice" label="產品價格" align="center">
+                    </el-table-column>
+                    <el-table-column prop="pstatus" label="產品狀態" align="center">
+                        <template slot-scope="scope">
+                            <span style="margin-right: 10px">
+                            {{scope.row.pstatus == "1" ? "上架" : "下架"}}</span>
+                        </template>
+
+                    </el-table-column>
+                    <el-table-column prop="pphoto" label="產品圖片" align="center">
+
+                        <template slot-scope="scope">
+<!--                            <img  style="width: auto; height: 40px; border: none; cursor: pointer"-->
+<!--                                    :src="getPhotoUrl(scope.row.pphoto)"  alt="Product Photo"/>-->
+                            <el-image style="width: auto; height: 40px; border: none; cursor: pointer"
+                                      :src="(scope.row.pphoto)"
+                                      fit="contain"
+                                      alt="Product Photo">
+                            </el-image>
+                        </template>
+<!--           <el-image style="width: auto; height: 40px; border: none; cursor: pointer" src="file:///D:/images/login.png"></el-image>-->
+
+                    </el-table-column>
+                    <el-table-column prop="pdescription" label="產品描述" align="center">
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="建立時間" align="center">
+                    </el-table-column>
+                    <el-table-column prop="updateTime" label="修改時間" align="center">
+                    </el-table-column>
+                    <el-table-column>
+                    <template slot-scope="scope">
+                    <el-button type="danger" size="medium" @click="getProductByid(scope.row.pid)">修改</el-button>
+                    <el-button type="danger" size="medium" @click="deleteById(scope.row.pid)">删除</el-button>
+                    </template>
+                    </el-table-column>
+                </el-table>
+                <!--控制按鈕-->
+                <el-row>
+                    <el-button type="danger" size="medium" @click="deleteByIds">- 批量删除</el-button>
+                    <el-button type="primary" size="medium" @click="dialogFormVisible = true">+ 新增產品</el-button>
+                </el-row>
+
+                <br>
+
+                <!-- Pagination 分页 -->
+                <el-pagination background layout="total,sizes, prev, pager, next, jumper"
+                               @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
+            </el-main>
+            <!--添加產品彈出表單-->
+
+            <el-dialog title=新增產品 :visible.sync="dialogFormVisible">
+                <el-form ref="form" :model="product" label-width="80px" size="mini">
+                    <el-form-item label="產品名稱" prop="pname" :rules="pnameRules">
+                        <el-input v-model="product.pname" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="產品分類">
+                        <el-input v-model="product.pcategory" required></el-input>
+                    </el-form-item>
+                    <el-form-item label="產品價格">
+                        <el-input v-model="product.pprice" required></el-input>
+                    </el-form-item>
+                    <el-form-item label="產品圖片">
+                        <img v-if="product.pphoto" :src="product.pphoto" width="100px"/>
+                        <el-upload
+                                action="upload"
+                                name="pphoto"
+                                :on-success="handleUploadSuccess"
+                                multiple="true"
+                                list-type="picture-card"
+
+                                :show-file-list="false"
+                        >
+
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+<!--                        <el-form-item label="產品圖片">-->
+<!--                            <el-upload-->
+<!--                                    action="/upload"-->
+<!--                                    name="pphoto"-->
+<!--                                    :show-file-list="false"-->
+<!--                                    :on-success="handleUploadSuccess"-->
+<!--                            >-->
+<!--                                <img v-if="product.pphoto" :src="product.pphoto" />-->
+<!--                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                            </el-upload>-->
+<!--                        </el-form-item>-->
+
+
+                    </el-form-item>
+                    <el-form-item label="產品狀態" prop="pstatus":rules="pstatusRules">
+                        <el-input v-model="product.pstatus"  ></el-input>
+                    </el-form-item>
+                    <el-form-item label="產品描述"  prop="pdescription" :rules="pdescriptionRules">
+                        <el-input v-model="product.pdescription"   ></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="人氣推薦"  prop="pnew" :rules="pnewRules">
+                        <el-input v-model="product.pnew"  ></el-input>
+                    </el-form-item>
+                    <el-form-item label="最新商品" prop="hot" :rules="hotRules">
+                        <el-input v-model="product.hot"  ></el-input>
+                    </el-form-item>
+                    <el-form-item label="cid">
+                        <el-input v-model="product.cid"  required></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="dialogFormVisible = false">取消</el-button>
+                        <el-button type="primary" @click="addproduct">確定新增</el-button>
+                        <el-button type="primary" @click="updateproduct(product.pid)">確定修改</el-button>
+                    </el-form-item>
+                </el-form>
+
+
+            </el-dialog>
+        </el-container>
+
+    </el-container>
+
+
+</div>
+
+</body>
+<!-- 引入 Vue 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<!-- 引入 axios 文件 -->
+<script src="/js/axios.min.js"></script>
+
+<!-- 引入 Element UI 的樣式文件 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入 Element UI 的腳本文件 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script src="/js/ElementTest.js"></script>
+
+
+
+</html>
