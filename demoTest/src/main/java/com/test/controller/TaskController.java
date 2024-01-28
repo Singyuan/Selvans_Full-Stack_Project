@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,13 +23,15 @@ public class TaskController {
     @PostMapping("/Task")
     public Result addTask(@RequestBody Task task){
         taskService.addTask(task);
-//        List<Task> t = taskService.addTask(task);
         return Result.success();
     }
 
     @GetMapping("/Task")
-    public List<Task> getAllTasks(@RequestBody Task task){
+    public Result getAllTasks(@RequestBody Task task){
         List<Task> t = taskService.getAllTasks();
-        return t;
+        if (t!=null){
+            return Result.success(t);
+        } else {
+            return Result.error("錯誤");}
     }
 }
