@@ -15,6 +15,6 @@ public class Task {
     private Integer taskAllocationId;
     private Integer workareaId;
     private Integer taskExampleId;
-    private Integer empId;
+    private Integer[] empId;
     private Date updateDate;
 }

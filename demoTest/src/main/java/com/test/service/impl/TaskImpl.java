@@ -17,10 +17,13 @@ public class TaskImpl implements TaskService {
     @Override
     public void addTask(Task task) {
         taskMapper.addTask(task);
-        TaskDetail td = new TaskDetail();
-        td.setTaskAllocationId(task.getTaskAllocationId());
-        td.setEmpId(task.getEmpId());
-        taskMapper.addTaskDetail(td);
+        Integer[] empArr = task.getEmpId();
+        for (int i = 0 ; i < empArr.length ; i++ ) {
+            TaskDetail td = new TaskDetail();
+            td.setTaskAllocationId(task.getTaskAllocationId());
+            td.setEmpId(empArr[i]);
+            taskMapper.addTaskDetail(td);
+        }
     }
 
     @Override
