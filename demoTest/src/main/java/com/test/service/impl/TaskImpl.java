@@ -30,4 +30,9 @@ public class TaskImpl implements TaskService {
     public List<Task> getAllTasks() {
         return taskMapper.getAllTasks();
     }
+
+    @Override
+    public List<Task> getTasksById(Integer id) {
+        return taskMapper.getTasksById(id);
+    }
 }

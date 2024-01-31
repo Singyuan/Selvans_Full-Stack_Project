@@ -23,4 +23,10 @@ public interface TaskMapper {
     @Select("SELECT * FROM Task_Allocation")
     List<Task> getAllTasks();
 
+    @Select("SELECT Task_Allocation.task_allocation_id, Task_Allocation_Detail.emp_id\n" +
+            "FROM Task_Allocation\n" +
+            "JOIN Task_Allocation_Detail ON Task_Allocation.task_allocation_id = Task_Allocation_Detail.task_allocation_id\n" +
+            "WHERE Task_Allocation_Detail.emp_id = #{id};")
+    List<Task> getTasksById(Integer id);
+
 }
