@@ -17,4 +17,8 @@ public class Task {
     private Integer taskExampleId;
     private Integer[] empId;
     private Date updateDate;
+    private Integer quantity;
+    private String remark;
+    private Integer completeness;
+    private Integer status;
 }

@@ -11,8 +11,8 @@ import java.util.List;
 
 @Mapper
 public interface TaskMapper {
-    @Insert("INSERT INTO Task_Allocation (workarea_id, task_example_id, update_date)\n" +
-            "VALUES (#{workareaId}, #{taskExampleId}, #{updateDate});")
+    @Insert("INSERT INTO Task_Allocation (workarea_id, task_example_id, update_date, quantity, remark)\n" +
+            "VALUES (#{workareaId}, #{taskExampleId}, #{updateDate}, #{quantity}, #{remark});")
     @SelectKey(statement = {"SELECT LAST_INSERT_ID()"}, keyProperty = "taskAllocationId", before = false, resultType = int.class)
     void addTask(Task task);
 
