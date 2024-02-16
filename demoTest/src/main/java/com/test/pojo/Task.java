@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @Data
@@ -14,5 +15,10 @@ public class Task {
     private Integer taskAllocationId;
     private Integer workareaId;
     private Integer taskExampleId;
+    private Integer[] empId;
     private Date updateDate;
+    private Integer quantity;
+    private String remark;
+    private Integer completeness;
+    private Integer status;
 }
