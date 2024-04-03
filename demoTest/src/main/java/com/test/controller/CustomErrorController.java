@@ -8,7 +8,7 @@ public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
     public String handleError() {
-        // 将404错误重定向到Vue应用程序的入口点
+
         return "forward:/index.html";
     }
 
