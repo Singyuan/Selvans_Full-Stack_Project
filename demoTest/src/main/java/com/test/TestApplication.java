@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 // 啟動類 -- 啟動 Spring Boot
 @SpringBootApplication
 @CrossOrigin
@@ -39,5 +40,8 @@ public class TestApplication extends SpringBootServletInitializer implements Web
 				.allowCredentials(true)
 				.maxAge(3600);
 	}
+
+
+
 
 }

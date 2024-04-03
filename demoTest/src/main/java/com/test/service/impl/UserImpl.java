@@ -6,6 +6,8 @@ import com.test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserImpl implements UserService {
 
@@ -15,4 +17,10 @@ public class UserImpl implements UserService {
     public User login(User user) {
         return userMapper.getUserByAandP(user);
     }
+
+    @Override
+    public List<User> getEmplist() {return  userMapper.getEmpInfo();}
+
+    @Override
+    public void addEmpInfo(User user) { userMapper.insertEmp(user);}
 }
